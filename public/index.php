@@ -15,7 +15,7 @@ declare(strict_types=1);
     <h2>Тимчук Петро: ІПЗ-22, варіант 11</h2>
 
     <div class="button-container">
-        <?php for ($i = 1; $i <= 11; $i++): ?>
+        <?php for ($i = 1; $i <= 7; $i++): ?>
             <a href="pages/task_<?php echo $i; ?>.php" class="task-btn">
                 Завдання <?php echo $i; ?>
             </a>
