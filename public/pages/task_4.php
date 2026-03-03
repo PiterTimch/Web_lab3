@@ -144,9 +144,9 @@ $dispatcher->dispatch();
 <div class="form-container wide">
 
     <div class="alert">
-        <strong>6.</strong> Реалізувати клас Calc з усіма арифметичними методами.<br>
-        <strong>7.</strong> Перевірити працездатність класу створивши обʼєкт і викликавши методи.<br>
-        <strong>8.</strong> Створити CalcDispatcher. 
+        6. Реалізувати клас Calc з усіма арифметичними методами.<br>
+        7. Перевірити працездатність класу створивши обʼєкт і викликавши методи.<br>
+        8. Створити CalcDispatcher. 
         Розрахунок — у display(), обробка — у dispatch().
         Звʼязок з Calc через агрегацію.
     </div>
