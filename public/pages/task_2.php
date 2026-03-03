@@ -1,18 +1,61 @@
 <?php
 declare(strict_types=1);
 
-$result = null;
-$error = null;
+class Country
+{
+    private string $name;
+    private int $population;
+    private string $capital;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $number = $_POST['number'] ?? '';
-    $digit = $_POST['digit'] ?? '';
+    public function __construct(string $name, int $population, string $capital)
+    {
+        if ($name === '' || $capital === '') {
+            throw new InvalidArgumentException('Назва країни та столиці не можуть бути порожніми.');
+        }
 
-    if (!ctype_digit($number) || !ctype_digit($digit) || strlen($digit) !== 1) {
-        $error = "Будь ласка, введіть правильне число та одну цифру.";
-    } else {
-        $result = substr_count($number, $digit);
+        if ($population <= 0) {
+            throw new InvalidArgumentException('Населення повинно бути більше нуля.');
+        }
+
+        $this->name = $name;
+        $this->population = $population;
+        $this->capital = $capital;
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPopulation(): int
+    {
+        return $this->population;
+    }
+
+    public function getCapital(): string
+    {
+        return $this->capital;
+    }
+
+    public function toTableRows(): array
+    {
+        return [
+            'Country name' => $this->getName(),
+            'Population'   => number_format($this->getPopulation(), 0, '.', ' '),
+            'Capital city' => $this->getCapital(),
+        ];
+    }
+}
+
+$countries = [];
+
+try {
+    $countries[] = new Country('Germany', 83100000, 'Berlin');
+    $countries[] = new Country('France', 67000000, 'Paris');
+    $countries[] = new Country('Japan', 125000000, 'Tokyo');
+    $countries[] = new Country('Canada', 39000000, 'Ottawa');
+} catch (Throwable $e) {
+    $error = $e->getMessage();
 }
 ?>
 <!DOCTYPE html>
@@ -24,32 +67,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h1>Завдання №2</h1>
 
-    <div class="form-container">
-        <?php if ($error): ?>
-            <div class="alert alert-error"><?= $error ?></div>
-        <?php endif; ?>
+<h1>Завдання №2</h1>
 
-        <?php if ($result !== null): ?>
-            <div class="alert alert-success">
-                Цифра <strong><?= htmlspecialchars($digit) ?></strong> зустрічається <strong><?= $result ?></strong> разів у числі <strong><?= htmlspecialchars($number) ?></strong>.
-            </div>
-        <?php endif; ?>
+<div class="form-container wide">
 
-        <form method="POST">
-            <div class="input-group">
-                <label for="number">Число:</label>
-                <input type="text" name="number" id="number" value="<?= $_POST['number'] ?? '442158755745' ?>" required>
-            </div>
-            <div class="input-group">
-                <label for="digit">Цифра для пошуку:</label>
-                <input type="text" name="digit" id="digit" maxlength="1" value="<?= $_POST['digit'] ?? '5' ?>" required>
-            </div>
-            <button type="submit" class="submit-btn">Порахувати</button>
-        </form>
-
-        <a href="../index.php" class="back-link">← Назад до списку</a>
+    <div class="alert">
+        <strong>Умова:</strong><br>
+        Створити клас країни, в якому будуть поля: назва країни, населення 
+        і назва столиці (англійські назви). Створити масив об'єктів, 
+        вивести кожний з них у таблицю в три рядки по дві комірки 
+        (ліворуч — ім'я елемента, праворуч — його значення).
     </div>
+
+    <?php if (!empty($error)): ?>
+        <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+
+    <?php foreach ($countries as $country): ?>
+        <div class="matrix-wrapper">
+            <table>
+                <?php foreach ($country->toTableRows() as $label => $value): ?>
+                    <tr>
+                        <td><strong><?= htmlspecialchars($label) ?></strong></td>
+                        <td><?= htmlspecialchars((string)$value) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    <?php endforeach; ?>
+
+    <a href="../index.php" class="back-link">← Назад до списку</a>
+
+</div>
+
 </body>
 </html>
