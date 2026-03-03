@@ -1,0 +1,197 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    --primary-blue: #0284c7;
+    --dark-blue: #0369a1;
+    --white: #ffffff;
+    --text-main: #0f172a;
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --error-bg: #fee2e2;
+    --error-text: #991b1b;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--dark-blue);
+    letter-spacing: -0.025em;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--dark-blue);
+    text-align: center;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.form-container.wide {
+    max-width: 900px;
+}
+
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-blue);
+}
+
+input[type="text"], 
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.submit-btn:hover {
+    background: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+.matrix-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+    font-size: 0.85rem;
+}
+
+td {
+    border: 1px solid rgba(2, 132, 199, 0.2);
+    padding: 8px 4px;
+    text-align: center;
+    color: var(--dark-blue);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.alert-error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid #bbf7d0;
+}
+
+.back-link {
+    margin-top: 1.5rem;
+    display: block;
+    text-align: center;
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 700px;
+    width: 90%;
+}
+
+.task-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    color: var(--primary-blue);
+    text-decoration: none;
+    border-radius: 1rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow);
+}
+
+.task-btn:hover {
+    background: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-4px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .button-container { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .button-container { grid-template-columns: 1fr; }
+    h1 { font-size: 1.8rem; }
+    .form-container { padding: 1.5rem; }
+}
