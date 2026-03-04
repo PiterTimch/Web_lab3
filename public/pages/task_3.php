@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 class User
 {
-    protected string $lastName;
-    protected string $firstName;
-    protected int $age;
-    protected string $email;
+    private string $lastName;
+    private string $firstName;
+    private int $age;
+    private string $email;
 
     public function fill(string $lastName, string $firstName, int $age, string $email): void
     {
@@ -16,7 +16,7 @@ class User
         $this->setEmail($email);
     }
 
-    protected function setLastName(string $lastName): void
+    public function setLastName(string $lastName): void
     {
         $lastName = trim($lastName);
 
@@ -27,7 +27,7 @@ class User
         $this->lastName = $lastName;
     }
 
-    protected function setFirstName(string $firstName): void
+    public function setFirstName(string $firstName): void
     {
         $firstName = trim($firstName);
 
@@ -38,7 +38,7 @@ class User
         $this->firstName = $firstName;
     }
 
-    protected function setAge(int $age): void
+    public function setAge(int $age): void
     {
         if ($age <= 0 || $age > 120) {
             throw new InvalidArgumentException('Вік повинен бути в межах 1–120.');
@@ -47,7 +47,7 @@ class User
         $this->age = $age;
     }
 
-    protected function setEmail(string $email): void
+    public function setEmail(string $email): void
     {
         $email = trim($email);
 

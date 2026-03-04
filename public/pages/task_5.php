@@ -21,7 +21,7 @@ declare(strict_types=1);
     </div>
 
     <div class="matrix-wrapper" style="text-align:center;">
-        <img src="../images/class_diagram.png" 
+        <img src="../images/diagram.png" 
              alt="Діаграма класів"
              style="max-width:100%; height:auto;">
     </div>

@@ -71,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tables[] = new MultiplicationTable($number);
             $tables[] = new MultiplicationTable($number + 1);
             $tables[] = new MultiplicationTable($number + 2);
-
         } catch (Throwable $e) {
             $error = $e->getMessage();
         }
