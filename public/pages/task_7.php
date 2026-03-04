@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-session_start();
-
 class TreeNode
 {
     public int $id;
@@ -14,43 +12,47 @@ class TreeNode
         $this->id = $id;
         $this->name = $name;
     }
-
-    public function addChild(TreeNode $child): void
-    {
-        $this->children[] = $child;
-    }
 }
 
 class Tree
 {
     private array $nodes = [];
+
     private array $roots = [];
 
     public function load(string $file): void
     {
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
         if (!$lines) {
             return;
         }
 
+        $waitingChildren = [];
+
         foreach ($lines as $line) {
             [$id, $parentId, $name] = array_map('trim', explode('|', $line));
 
-            $this->nodes[(int)$id] = [
-                'node' => new TreeNode((int)$id, $name),
-                'parent' => (int)$parentId
-            ];
-        }
+            $id = (int)$id;
+            $parentId = (int)$parentId;
 
-        foreach ($this->nodes as $data) {
-            $node = $data['node'];
-            $parentId = $data['parent'];
+            $node = new TreeNode($id, $name);
+            $this->nodes[$id] = $node;
 
             if ($parentId === 0) {
                 $this->roots[] = $node;
             } else {
-                $this->nodes[$parentId]['node']->addChild($node);
+                if (isset($this->nodes[$parentId])) {
+                    $this->nodes[$parentId]->children[] = $node;
+                } else {
+                    $waitingChildren[$parentId][] = $node;
+                }
+            }
+
+            if (isset($waitingChildren[$id])) {
+                foreach ($waitingChildren[$id] as $child) {
+                    $node->children[] = $child;
+                }
+                unset($waitingChildren[$id]);
             }
         }
     }
@@ -68,89 +70,15 @@ class Tree
 
     private function renderNode(TreeNode $node, int $level): string
     {
-        $result = str_repeat("\t", $level) . htmlspecialchars($node->name) . "<br>";
+        $line = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $level)
+              . htmlspecialchars($node->name)
+              . "<br>";
 
         foreach ($node->children as $child) {
-            $result .= $this->renderNode($child, $level + 1);
+            $line .= $this->renderNode($child, $level + 1);
         }
 
-        return $result;
-    }
-}
-
-class Apple
-{
-    public static array $apples = [];
-
-    public string $color;
-    public float $size = 1.0;
-
-    protected string $status = 'tree';
-    protected int $hoursOnGround = 0;
-    protected bool $rotten = false;
-
-    public function __construct(string $color)
-    {
-        $this->color = ucfirst(strtolower($color));
-        self::$apples[] = $this;
-    }
-
-    public function fall_to_ground(): void
-    {
-        if ($this->status === 'tree') {
-            $this->status = 'ground';
-        }
-    }
-
-    public function eat(float $percent): void
-    {
-        if ($this->status !== 'ground') {
-            return;
-        }
-
-        if ($this->rotten) {
-            return;
-        }
-
-        if ($percent <= 0) {
-            return;
-        }
-
-        $fraction = $percent / 100;
-
-        if ($fraction > $this->size) {
-            $fraction = $this->size;
-        }
-
-        $this->size -= $fraction;
-
-        if ($this->size <= 0) {
-            $this->remove();
-        }
-    }
-
-    private function remove(): void
-    {
-        foreach (self::$apples as $key => $apple) {
-            if ($apple === $this) {
-                unset(self::$apples[$key]);
-            }
-        }
-
-        self::$apples = array_values(self::$apples);
-    }
-
-    public static function lost_hour(): void
-    {
-        foreach (self::$apples as $apple) {
-            if ($apple->status === 'ground') {
-                $apple->hoursOnGround++;
-
-                if ($apple->hoursOnGround >= 5) {
-                    $apple->rotten = true;
-                }
-            }
-        }
+        return $line;
     }
 }
 
@@ -162,23 +90,6 @@ if (file_exists($treeFile)) {
     $tree->load($treeFile);
     $treeOutput = $tree->render();
 }
-
-$apple1 = new Apple('green');
-
-$demo = '';
-$demo .= "Color: " . $apple1->color . "<br>";
-$demo .= "Static access: " . Apple::$apples[0]->color . "<br>";
-
-$apple1->eat(50);
-$demo .= "Size after eat(50): " . $apple1->size . "<br>";
-
-$apple1->fall_to_ground();
-$apple1->eat(25);
-$demo .= "Size after fall + eat(25): " . $apple1->size . "<br>";
-
-Apple::lost_hour();
-$demo .= "Total apples in array: " . count(Apple::$apples) . "<br>";
-
 ?>
 <!DOCTYPE html>
 <html lang="uk">
@@ -193,14 +104,15 @@ $demo .= "Total apples in array: " . count(Apple::$apples) . "<br>";
 
 <div class="form-container wide">
 
-    <h2>Дерево</h2>
-    <div class="matrix-wrapper">
-        <?= $treeOutput ?>
+    <div class="alert">
+        Є текстовий файл з описом дерева (node_id | parent_id | node_name).<br>
+        Необхідно відобразити його як дерево каталогів без зайвих ітерацій.
     </div>
 
-    <h2>Apple Demo</h2>
+    <h2>Структура дерева</h2>
+
     <div class="matrix-wrapper">
-        <?= $demo ?>
+        <?= $treeOutput ?>
     </div>
 
     <a href="../index.php" class="back-link">← Назад</a>
